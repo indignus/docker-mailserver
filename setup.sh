@@ -13,7 +13,7 @@ IMAGE_NAME=$(echo $INFO | awk '{print $1}')
 CONTAINER_NAME=$(echo $INFO | awk '{print $2}')
 
 if [ -z "$IMAGE_NAME" ]; then
-  IMAGE_NAME=tvial/docker-mailserver:latest
+  IMAGE_NAME=indignus/docker-mailserver:latest
 fi
 
 _inspect() {
@@ -35,7 +35,7 @@ _usage() {
 OPTIONS:
 
   -i IMAGE_NAME     The name of the docker-mailserver image, by default
-                    'tvial/docker-mailserver:latest'.
+                    'indignus/docker-mailserver:latest'.
   -c CONTAINER_NAME The name of the running container.
 
 SUBCOMMANDS:
