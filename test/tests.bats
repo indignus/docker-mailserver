@@ -730,7 +730,7 @@
 @test "checking setup.sh: setup.sh debug inspect" {
   run ./setup.sh -c mail debug inspect
   [ "$status" -eq 0 ]
-  [ "${lines[0]}" = "Image: tvial/docker-mailserver:testing" ]
+  [ "${lines[0]}" = "Image: indignus/docker-mailserver:testing" ]
   [ "${lines[1]}" = "Container: mail" ]
 }
 @test "checking setup.sh: setup.sh debug login ls" {
