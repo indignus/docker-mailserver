@@ -11,8 +11,8 @@ RUN apt-get update -q --fix-missing && \
     amavisd-new \
     arj \
     bzip2 \
-#    clamav \
-#    clamav-daemon \
+    clamav \
+    clamav-daemon \
     curl \
     dovecot-core \
     dovecot-imapd \
@@ -58,8 +58,8 @@ COPY target/dovecot/??-*.conf /etc/dovecot/conf.d/
 RUN sed -i -r 's/^(CRON)=0/\1=1/g' /etc/default/spamassassin
 
 # Enables Amavis
-#RUN sed -i -r 's/#(@|   \\%)bypass/\1bypass/g' /etc/amavis/conf.d/15-content_filter_mode
-#RUN adduser clamav amavis && adduser amavis clamav
+RUN sed -i -r 's/#(@|   \\%)bypass/\1bypass/g' /etc/amavis/conf.d/15-content_filter_mode
+RUN adduser clamav amavis && adduser amavis clamav
 RUN useradd -u 5000 -d /home/docker -s /bin/bash -p $(echo docker | openssl passwd -1 -stdin) docker
 
 # Configure Fail2ban
@@ -68,8 +68,8 @@ COPY target/fail2ban/filter.d/dovecot.conf /etc/fail2ban/filter.d/dovecot.conf
 RUN echo "ignoreregex =" >> /etc/fail2ban/filter.d/postfix-sasl.conf
 
 # Enables Clamav
-#RUN (crontab; echo "0 0,6,12,18 * * * /usr/bin/freshclam --quiet") | sort - | uniq - | crontab -
-#RUN chmod 644 /etc/clamav/freshclam.conf && freshclam
+RUN (crontab; echo "0 0,6,12,18 * * * /usr/bin/freshclam --quiet") | sort - | uniq - | crontab -
+RUN chmod 644 /etc/clamav/freshclam.conf && freshclam
 
 # Enables Pyzor and Razor
 USER amavis
@@ -95,14 +95,14 @@ COPY target/postfix/main.cf target/postfix/master.cf /etc/postfix/
 # Configuring Logs
 RUN sed -i -r "/^#?compress/c\compress\ncopytruncate" /etc/logrotate.conf && \
   mkdir -p /var/log/mail && chown syslog:root /var/log/mail && \
-#  touch /var/log/mail/clamav.log && chown -R clamav:root /var/log/mail/clamav.log && \
-#  touch /var/log/mail/freshclam.log &&  chown -R clamav:root /var/log/mail/freshclam.log && \
+  touch /var/log/mail/clamav.log && chown -R clamav:root /var/log/mail/clamav.log && \
+  touch /var/log/mail/freshclam.log &&  chown -R clamav:root /var/log/mail/freshclam.log && \
   sed -i -r 's|/var/log/mail|/var/log/mail/mail|g' /etc/rsyslog.d/50-default.conf && \
   sed -i -r 's|;auth,authpriv.none|;mail.none;mail.error;auth,authpriv.none|g' /etc/rsyslog.d/50-default.conf && \
-#  sed -i -r 's|LogFile /var/log/clamav/|LogFile /var/log/mail/|g' /etc/clamav/clamd.conf && \
-#  sed -i -r 's|UpdateLogFile /var/log/clamav/|UpdateLogFile /var/log/mail/|g' /etc/clamav/freshclam.conf && \
-#  sed -i -r 's|/var/log/clamav|/var/log/mail|g' /etc/logrotate.d/clamav-daemon && \
-#  sed -i -r 's|/var/log/clamav|/var/log/mail|g' /etc/logrotate.d/clamav-freshclam && \
+  sed -i -r 's|LogFile /var/log/clamav/|LogFile /var/log/mail/|g' /etc/clamav/clamd.conf && \
+  sed -i -r 's|UpdateLogFile /var/log/clamav/|UpdateLogFile /var/log/mail/|g' /etc/clamav/freshclam.conf && \
+  sed -i -r 's|/var/log/clamav|/var/log/mail|g' /etc/logrotate.d/clamav-daemon && \
+  sed -i -r 's|/var/log/clamav|/var/log/mail|g' /etc/logrotate.d/clamav-freshclam && \
   sed -i -r 's|/var/log/mail|/var/log/mail/mail|g' /etc/logrotate.d/rsyslog
 
 # Get LetsEncrypt signed certificate
