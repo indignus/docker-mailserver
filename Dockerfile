@@ -1,5 +1,5 @@
 FROM ubuntu:14.04
-MAINTAINER None
+MAINTAINER indignus
 
 # Packages
 ENV DEBIAN_FRONTEND noninteractive
