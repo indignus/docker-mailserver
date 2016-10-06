@@ -61,13 +61,13 @@ run:
 	docker run -d --name mail_disabled_amavis \
 		-v "`pwd`/test/config":/tmp/docker-mailserver \
 		-v "`pwd`/test":/tmp/docker-mailserver-test \
-		-e DISABLE_AMAVIS=1 \
+		-e ENABLE_AMAVIS=0 \
 		-h mail.my-domain.com -t $(NAME)
 	sleep 20
 	docker run -d --name mail_disabled_clamav \
 		-v "`pwd`/test/config":/tmp/docker-mailserver \
 		-v "`pwd`/test":/tmp/docker-mailserver-test \
-		-e DISABLE_CLAMAV=1 \
+		-e ENABLE_CLAMAV=0 \
 		-h mail.my-domain.com -t $(NAME)
 	docker run -d --name mail_manual_ssl \
 		-v "`pwd`/test/config":/tmp/docker-mailserver \
