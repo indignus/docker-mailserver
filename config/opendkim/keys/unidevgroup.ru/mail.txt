@@ -1,0 +1,2 @@
+mail._domainkey	IN	TXT	( "v=DKIM1; k=rsa; "
+	  "p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCnVsgwOeGXl8HBhjifTtr9E5JRaapIK8ywev+jLkgELLYuQTQH0i7C5waxKKS56Hzs5VD2ELcO12INf7pk0fpiki6F75/gQVcgIaFbg3s0hEUUEj6/0uWJzFRuVx3EsXZ4XrPjdzOP0cIcRwAD+9jwZ7zXN94F/7+uir6s3sZ96QIDAQAB" )  ; ----- DKIM key mail for unidevgroup.ru
