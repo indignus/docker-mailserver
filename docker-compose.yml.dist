@@ -16,6 +16,8 @@ services:
     - ./config/:/tmp/docker-mailserver/
     environment:
     - ENABLE_FAIL2BAN=1
+    - ENABLE_CLAMD=1
+    - ENABLE_AMAVIS=1
     cap_add:
     - NET_ADMIN
 
