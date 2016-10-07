@@ -16,7 +16,7 @@ generate-accounts:
 
 run:
 	# Run containers
-	docker run -d --name testmail \
+	docker run -d --name mail \
 		-v "`pwd`/test/config":/tmp/docker-mailserver \
 		-v "`pwd`/test":/tmp/docker-mailserver-test \
 		-v "`pwd`/test/onedir":/var/mail-state \
