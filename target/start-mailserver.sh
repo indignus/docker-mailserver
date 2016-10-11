@@ -22,8 +22,8 @@ if [ -f /tmp/docker-mailserver/postfix-accounts.cf ]; then
   chmod 640 /etc/dovecot/userdb
   cp -a /usr/share/dovecot/protocols.d /etc/dovecot/
   # Disable pop3 (it will be eventually enabled later in the script, if requested)
-  mv /etc/dovecot/protocols.d/pop3d.protocol /etc/dovecot/protocols.d/pop3d.protocol.disab
-  mv /etc/dovecot/protocols.d/managesieved.protocol /etc/dovecot/protocols.d/managesieved.protocol.disab
+  #mv /etc/dovecot/protocols.d/pop3d.protocol /etc/dovecot/protocols.d/pop3d.protocol.disab
+  #mv /etc/dovecot/protocols.d/managesieved.protocol /etc/dovecot/protocols.d/managesieved.protocol.disab
   sed -i -e 's/#ssl = yes/ssl = yes/g' /etc/dovecot/conf.d/10-master.conf
   sed -i -e 's/#port = 993/port = 993/g' /etc/dovecot/conf.d/10-master.conf
   sed -i -e 's/#port = 995/port = 995/g' /etc/dovecot/conf.d/10-master.conf
@@ -372,11 +372,11 @@ if [ "$SMTP_ONLY" != 1 ]; then
   /usr/sbin/dovecot -c /etc/dovecot/dovecot.conf
 fi
 
-if [ "$ENABLE_POP3" = 1 -a "$SMTP_ONLY" != 1 ]; then
-  echo "Starting POP3 services"
-  mv /etc/dovecot/protocols.d/pop3d.protocol.disab /etc/dovecot/protocols.d/pop3d.protocol
-  /usr/sbin/dovecot reload
-fi
+#if [ "$ENABLE_POP3" = 1 -a "$SMTP_ONLY" != 1 ]; then
+#  echo "Starting POP3 services"
+#  mv /etc/dovecot/protocols.d/pop3d.protocol.disab /etc/dovecot/protocols.d/pop3d.protocol
+#  /usr/sbin/dovecot reload
+#fi
 
 if [ -f /tmp/docker-mailserver/dovecot.cf ]; then
   echo 'Adding file "dovecot.cf" to the Dovecot configuration'

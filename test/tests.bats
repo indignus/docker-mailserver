@@ -261,11 +261,11 @@
 #
 
 @test "checking spamassassin: docker env variables are set correctly (default)" {
-  run docker exec mail_pop3 /bin/sh -c "grep '\$sa_tag_level_deflt' /etc/amavis/conf.d/20-debian_defaults | grep '= 2.0'"
+  run docker exec mail /bin/sh -c "grep '\$sa_tag_level_deflt' /etc/amavis/conf.d/20-debian_defaults | grep '= 2.0'"
   [ "$status" -eq 0 ]
-  run docker exec mail_pop3 /bin/sh -c "grep '\$sa_tag2_level_deflt' /etc/amavis/conf.d/20-debian_defaults | grep '= 6.31'"
+  run docker exec mail /bin/sh -c "grep '\$sa_tag2_level_deflt' /etc/amavis/conf.d/20-debian_defaults | grep '= 6.31'"
   [ "$status" -eq 0 ]
-  run docker exec mail_pop3 /bin/sh -c "grep '\$sa_kill_level_deflt' /etc/amavis/conf.d/20-debian_defaults | grep '= 6.31'"
+  run docker exec mail /bin/sh -c "grep '\$sa_kill_level_deflt' /etc/amavis/conf.d/20-debian_defaults | grep '= 6.31'"
   [ "$status" -eq 0 ]
 }
 
@@ -415,16 +415,16 @@
 }
 
 @test "checking ssl: letsencrypt configuration is correct" {
-  run docker exec mail_pop3 /bin/sh -c 'grep -ir "/etc/letsencrypt/live/mail.my-domain.com/" /etc/postfix/main.cf | wc -l'
+  run docker exec mail /bin/sh -c 'grep -ir "/etc/letsencrypt/live/mail.my-domain.com/" /etc/postfix/main.cf | wc -l'
   [ "$status" -eq 0 ]
   [ "$output" -eq 2 ]
-  run docker exec mail_pop3 /bin/sh -c 'grep -ir "/etc/letsencrypt/live/mail.my-domain.com/" /etc/dovecot/conf.d/10-ssl.conf | wc -l'
+  run docker exec mail /bin/sh -c 'grep -ir "/etc/letsencrypt/live/mail.my-domain.com/" /etc/dovecot/conf.d/10-ssl.conf | wc -l'
   [ "$status" -eq 0 ]
   [ "$output" -eq 2 ]
 }
 
 @test "checking ssl: letsencrypt cert works correctly" {
-  run docker exec mail_pop3 /bin/sh -c "timeout 1 openssl s_client -connect 0.0.0.0:587 -starttls smtp -CApath /etc/ssl/certs/ | grep 'Verify return code: 10 (certificate has expired)'"
+  run docker exec mail /bin/sh -c "timeout 1 openssl s_client -connect 0.0.0.0:587 -starttls smtp -CApath /etc/ssl/certs/ | grep 'Verify return code: 10 (certificate has expired)'"
   [ "$status" -eq 0 ]
 }
 
@@ -529,7 +529,7 @@
 }
 
 @test "checking fetchmail: fetchmail.cf is loaded" {
-  run docker exec mail_fetchmail grep 'pop3.example.com' /etc/fetchmailrc
+  run docker exec mail_fetchmail grep 'imap.example.com' /etc/fetchmailrc
   [ "$status" -eq 0 ]
 }
 
@@ -554,9 +554,9 @@
   [ "$status" -eq 1 ]
   run docker exec mail grep -i 'permission denied' /var/log/mail/mail.log
   [ "$status" -eq 1 ]
-  run docker exec mail_pop3 grep 'non-null host address bits in' /var/log/mail/mail.log
+  run docker exec mail grep 'non-null host address bits in' /var/log/mail/mail.log
   [ "$status" -eq 1 ]
-  run docker exec mail_pop3 grep ': error:' /var/log/mail/mail.log
+  run docker exec mail grep ': error:' /var/log/mail/mail.log
   [ "$status" -eq 1 ]
 }
 
@@ -593,7 +593,7 @@
 }
 
 @test "checking manage sieve: disabled per default" {
-  run docker exec mail_pop3 /bin/bash -c "nc -z 0.0.0.0 4190"
+  run docker exec mail /bin/bash -c "nc -z 0.0.0.0 4190"
   [ "$status" -ne 0 ]
 }
 
@@ -661,7 +661,7 @@
 @test "checking PERMIT_DOCKER: my network value" {
   run docker exec mail /bin/sh -c "postconf | grep '^mynetworks =' | egrep '[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.0\.0/16'"
   [ "$status" -eq 0 ]
-  run docker exec mail_pop3 /bin/sh -c "postconf | grep '^mynetworks =' | egrep '[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}/32'"
+  run docker exec mail /bin/sh -c "postconf | grep '^mynetworks =' | egrep '[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}/32'"
   [ "$status" -eq 0 ]
 }
 

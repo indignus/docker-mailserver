@@ -19,22 +19,18 @@ run:
 	docker run -d --name mail \
 		-v "`pwd`/test/config":/tmp/docker-mailserver \
 		-v "`pwd`/test":/tmp/docker-mailserver-test \
+		-v "`pwd`/test/config/letsencrypt":/etc/letsencrypt/live \
 		-v "`pwd`/test/onedir":/var/mail-state \
 		-e SA_TAG=1.0 \
 		-e SA_TAG2=2.0 \
 		-e SA_KILL=3.0 \
 		-e SASL_PASSWD="external-domain.com username:password" \
 		-e ENABLE_MANAGESIEVE=1 \
+                -e ENABLE_AMAVIS=1 \
+                -e ENABLE_CLAMAV=1 \
+		-e SSL_TYPE=letsencrypt \
 		-e ONE_DIR=1 \
 		-e PERMIT_DOCKER=host\
-		-h mail.my-domain.com -t $(NAME)
-	sleep 20
-	docker run -d --name mail_pop3 \
-		-v "`pwd`/test/config":/tmp/docker-mailserver \
-		-v "`pwd`/test":/tmp/docker-mailserver-test \
-		-v "`pwd`/test/config/letsencrypt":/etc/letsencrypt/live \
-		-e ENABLE_POP3=1 \
-		-e SSL_TYPE=letsencrypt \
 		-h mail.my-domain.com -t $(NAME)
 	sleep 20
 	docker run -d --name mail_smtponly \
@@ -108,7 +104,6 @@ clean:
 	# Remove running test containers
 	-docker rm -f \
 		mail \
-		mail_pop3 \
 		mail_smtponly \
 		mail_fail2ban \
 		mail_fetchmail \
